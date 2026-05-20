@@ -46,15 +46,4 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// === FORM (solo en contacto.html) ===
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-  contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!this.checkValidity()) { this.reportValidity(); return; }
-    this.style.display = 'none';
-    const msg = document.getElementById('successMsg');
-    msg.classList.add('show');
-    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-}
+// La lógica del formulario de contacto está en contacto.html

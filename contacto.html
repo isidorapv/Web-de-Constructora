@@ -8,6 +8,67 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- EmailJS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    /* === Validación === */
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error  { border-color: #E53E3E !important; transition: border-color .3s ease; }
+    .form-group input.valid,
+    .form-group select.valid,
+    .form-group textarea.valid  { border-color: #38A169 !important; }
+    .error-msg { font-size: .8rem; color: #E53E3E; margin-top: 4px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* === Spinner === */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
+
+    /* === Modales === */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,.52);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-card {
+      background: var(--surface); border-radius: 16px;
+      padding: 44px 36px; max-width: 440px; width: 92%;
+      text-align: center;
+      transform: scale(.85); transition: transform .3s ease;
+      box-shadow: 0 24px 64px rgba(0,0,0,.32);
+    }
+    .modal-overlay.show .modal-card { transform: scale(1); }
+    .modal-icon { margin: 0 auto 22px; }
+    .modal-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.75rem; font-weight: 700;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .modal-message {
+      font-size: .97rem; color: var(--text-muted);
+      line-height: 1.65; margin-bottom: 28px;
+    }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .modal-btn {
+      padding: 12px 36px; border-radius: 6px; border: none; cursor: pointer;
+      font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      transition: background .2s, transform .15s;
+      text-decoration: none; display: inline-block;
+    }
+    .modal-btn-primary { background: var(--navy); color: #fff; }
+    .modal-btn-primary:hover { background: var(--navy-h); transform: translateY(-1px); }
+    .modal-btn-wa { background: #25D366; color: #fff; }
+    .modal-btn-wa:hover { background: #1da855; transform: translateY(-1px); }
+
+    /* Animación check */
+    @keyframes draw { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+    .check-path { stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw .5s ease .25s forwards; }
+  </style>
 </head>
 <body>
 
@@ -64,121 +125,115 @@
           <p class="contacto-subtitle">Completa el formulario y te contactamos en menos de 24 horas hábiles.</p>
         </div>
 
-        <div id="formWrapper">
-          <form class="contact-form reveal" id="contactForm" novalidate>
+        <form class="contact-form reveal" id="contactForm" novalidate>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label for="nombre">Nombre completo *</label>
-                <input type="text" id="nombre" name="nombre" placeholder="Ej: María González" required />
-              </div>
-              <div class="form-group">
-                <label for="email">Correo electrónico *</label>
-                <input type="email" id="email" name="email" placeholder="tu@correo.cl" required />
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="telefono">Número de contacto *</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="+56 9 XXXX XXXX" required />
-              </div>
-              <div class="form-group">
-                <label for="comuna">Comuna *</label>
-                <select id="comuna" name="comuna" required>
-                  <option value="" disabled selected>Selecciona tu comuna</option>
-                  <option>Alhué</option>
-                  <option>Buin</option>
-                  <option>Calera de Tango</option>
-                  <option>Cerrillos</option>
-                  <option>Cerro Navia</option>
-                  <option>Colina</option>
-                  <option>Conchalí</option>
-                  <option>Curacaví</option>
-                  <option>El Bosque</option>
-                  <option>El Monte</option>
-                  <option>Estación Central</option>
-                  <option>Huechuraba</option>
-                  <option>Independencia</option>
-                  <option>Isla de Maipo</option>
-                  <option>La Cisterna</option>
-                  <option>La Florida</option>
-                  <option>La Granja</option>
-                  <option>La Pintana</option>
-                  <option>La Reina</option>
-                  <option>Lampa</option>
-                  <option>Las Condes</option>
-                  <option>Lo Barnechea</option>
-                  <option>Lo Espejo</option>
-                  <option>Lo Prado</option>
-                  <option>Macul</option>
-                  <option>Maipú</option>
-                  <option>María Pinto</option>
-                  <option>Melipilla</option>
-                  <option>Ñuñoa</option>
-                  <option>Padre Hurtado</option>
-                  <option>Paine</option>
-                  <option>Pedro Aguirre Cerda</option>
-                  <option>Peñaflor</option>
-                  <option>Peñalolén</option>
-                  <option>Pirque</option>
-                  <option>Providencia</option>
-                  <option>Pudahuel</option>
-                  <option>Puente Alto</option>
-                  <option>Quilicura</option>
-                  <option>Quinta Normal</option>
-                  <option>Recoleta</option>
-                  <option>Renca</option>
-                  <option>San Bernardo</option>
-                  <option>San Joaquín</option>
-                  <option>San José de Maipo</option>
-                  <option>San Miguel</option>
-                  <option>San Pedro</option>
-                  <option>San Ramón</option>
-                  <option>Santiago</option>
-                  <option>Talagante</option>
-                  <option>Tiltil</option>
-                  <option>Vitacura</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="region">Región *</label>
-                <select id="region" name="region" disabled>
-                  <option selected>Región Metropolitana</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="direccion">Dirección del proyecto *</label>
-                <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Las Torres 123" required />
-              </div>
-            </div>
-
+          <div class="form-row">
             <div class="form-group">
-              <label for="fotos">Fotos del lugar o referencia (opcional)</label>
-              <input type="file" id="fotos" name="fotos" accept="image/*" multiple />
+              <label for="nombre">Nombre completo *</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Ej: María González" required />
+              <span class="error-msg"></span>
             </div>
-
             <div class="form-group">
-              <label for="descripcion">Descripción del requerimiento *</label>
-              <textarea id="descripcion" name="descripcion" rows="5" placeholder="Cuéntanos en qué consiste tu proyecto: dimensiones aproximadas, materiales de preferencia, plazos, etc." required></textarea>
+              <label for="email">Correo electrónico *</label>
+              <input type="email" id="email" name="email" placeholder="tu@correo.cl" required />
+              <span class="error-msg"></span>
             </div>
-
-            <button type="submit" class="btn-submit">Enviar solicitud</button>
-          </form>
-        </div>
-
-        <div class="success-msg" id="successMsg">
-          <div class="success-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-            </svg>
           </div>
-          <h3>¡Gracias!</h3>
-          <p>Nos pondremos en contacto contigo pronto.</p>
-        </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="telefono">Número de contacto *</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="+56 9 XXXX XXXX" required />
+              <span class="error-msg"></span>
+            </div>
+            <div class="form-group">
+              <label for="comuna">Comuna *</label>
+              <select id="comuna" name="comuna" required>
+                <option value="" disabled selected>Selecciona tu comuna</option>
+                <option>Alhué</option>
+                <option>Buin</option>
+                <option>Calera de Tango</option>
+                <option>Cerrillos</option>
+                <option>Cerro Navia</option>
+                <option>Colina</option>
+                <option>Conchalí</option>
+                <option>Curacaví</option>
+                <option>El Bosque</option>
+                <option>El Monte</option>
+                <option>Estación Central</option>
+                <option>Huechuraba</option>
+                <option>Independencia</option>
+                <option>Isla de Maipo</option>
+                <option>La Cisterna</option>
+                <option>La Florida</option>
+                <option>La Granja</option>
+                <option>La Pintana</option>
+                <option>La Reina</option>
+                <option>Lampa</option>
+                <option>Las Condes</option>
+                <option>Lo Barnechea</option>
+                <option>Lo Espejo</option>
+                <option>Lo Prado</option>
+                <option>Macul</option>
+                <option>Maipú</option>
+                <option>María Pinto</option>
+                <option>Melipilla</option>
+                <option>Ñuñoa</option>
+                <option>Padre Hurtado</option>
+                <option>Paine</option>
+                <option>Pedro Aguirre Cerda</option>
+                <option>Peñaflor</option>
+                <option>Peñalolén</option>
+                <option>Pirque</option>
+                <option>Providencia</option>
+                <option>Pudahuel</option>
+                <option>Puente Alto</option>
+                <option>Quilicura</option>
+                <option>Quinta Normal</option>
+                <option>Recoleta</option>
+                <option>Renca</option>
+                <option>San Bernardo</option>
+                <option>San Joaquín</option>
+                <option>San José de Maipo</option>
+                <option>San Miguel</option>
+                <option>San Pedro</option>
+                <option>San Ramón</option>
+                <option>Santiago</option>
+                <option>Talagante</option>
+                <option>Tiltil</option>
+                <option>Vitacura</option>
+              </select>
+              <span class="error-msg"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="region">Región *</label>
+              <select id="region" name="region" disabled>
+                <option selected>Región Metropolitana</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="direccion">Dirección del proyecto *</label>
+              <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Las Torres 123" required />
+              <span class="error-msg"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fotos">Fotos del lugar o referencia (opcional)</label>
+            <input type="file" id="fotos" name="fotos" accept="image/*" multiple />
+          </div>
+
+          <div class="form-group">
+            <label for="descripcion">Descripción del requerimiento *</label>
+            <textarea id="descripcion" name="descripcion" rows="5" placeholder="Cuéntanos en qué consiste tu proyecto: dimensiones aproximadas, materiales de preferencia, plazos, etc." required></textarea>
+            <span class="error-msg"></span>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">Enviar solicitud</button>
+        </form>
       </div>
     </div>
   </section>
@@ -233,6 +288,262 @@
     <div class="footer-bottom">© 2025 NECSA. Todos los derechos reservados.</div>
   </footer>
 
+  <!-- =============================================
+       MODALES
+       ============================================= -->
+
+  <!-- Modal: Éxito -->
+  <div class="modal-overlay" id="modalSuccess">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="36" cy="36" r="33" stroke="#38A169" stroke-width="3.5"/>
+          <path class="check-path" d="M20 36l12 12 20-22" stroke="#38A169" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <h3 class="modal-title">¡Solicitud enviada!</h3>
+      <p class="modal-message">Tu solicitud ha sido enviada correctamente. Te responderemos a la brevedad a tu correo electrónico.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="closeModal('modalSuccess', true)">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Duplicado -->
+  <div class="modal-overlay" id="modalDuplicate">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="36" cy="36" r="33" stroke="#D69E2E" stroke-width="3.5"/>
+          <path d="M36 22v20" stroke="#D69E2E" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="36" cy="50" r="2.5" fill="#D69E2E"/>
+        </svg>
+      </div>
+      <h3 class="modal-title">Solicitud duplicada</h3>
+      <p class="modal-message">Ya has enviado una solicitud para esta dirección. Por favor espera al menos 2 horas antes de volver a intentarlo.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="closeModal('modalDuplicate', false)">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Error -->
+  <div class="modal-overlay" id="modalError">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="36" cy="36" r="33" stroke="#E53E3E" stroke-width="3.5"/>
+          <path d="M24 24l24 24M48 24L24 48" stroke="#E53E3E" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3 class="modal-title">Error al enviar</h3>
+      <p class="modal-message">Ocurrió un error al enviar. Por favor intenta nuevamente o contáctanos directamente por WhatsApp.</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-primary" onclick="closeModal('modalError', false)">Intentar de nuevo</button>
+        <a href="https://wa.me/56912345678" target="_blank" rel="noopener noreferrer" class="modal-btn modal-btn-wa">Ir a WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
   <script src="scripts.js"></script>
+
+  <script>
+    // =============================================
+    // EMAILJS — Configuración
+    // IMPORTANTE: Reemplaza los valores YOUR_* con tus credenciales reales.
+    // Regístrate en https://www.emailjs.com/ → Email Services → Add New Service
+    // Luego crea un template y copia los IDs aquí abajo.
+    // =============================================
+    const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // ← reemplazar con tu Service ID
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ← reemplazar con tu Template ID
+    const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // ← reemplazar con tu Public Key
+
+    // Si las credenciales no están configuradas, el formulario opera en modo demo
+    // (simula el envío sin enviarlo realmente)
+    const DEMO_MODE = EMAILJS_SERVICE_ID === 'YOUR_SERVICE_ID';
+    if (!DEMO_MODE) emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    // =============================================
+    // MODALES
+    // =============================================
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('show');
+      // Reiniciar animación del check
+      if (id === 'modalSuccess') {
+        const path = modal.querySelector('.check-path');
+        if (path) { path.style.animation = 'none'; path.offsetHeight; path.style.animation = ''; }
+      }
+    }
+
+    function closeModal(id, resetForm) {
+      document.getElementById(id).classList.remove('show');
+      if (resetForm) {
+        const form = document.getElementById('contactForm');
+        form.reset();
+        form.querySelectorAll('input, select, textarea').forEach(el => {
+          el.classList.remove('error', 'valid');
+        });
+        form.querySelectorAll('.error-msg').forEach(el => {
+          el.textContent = ''; el.classList.remove('show');
+        });
+      }
+    }
+
+    // =============================================
+    // DETECCIÓN DE DUPLICADOS (localStorage)
+    // =============================================
+    const STORAGE_KEY = 'necsa_submissions';
+    const TWO_HOURS   = 2 * 60 * 60 * 1000;
+    const ONE_DAY     = 24 * 60 * 60 * 1000;
+
+    function makeKey(email, nombre, direccion) {
+      return (email + nombre + direccion).toLowerCase().replace(/\s+/g, '');
+    }
+
+    function cleanOldEntries() {
+      const now  = Date.now();
+      const all  = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      const kept = all.filter(e => (now - e.timestamp) < ONE_DAY);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(kept));
+      return kept;
+    }
+
+    function isDuplicate(key) {
+      const entries = cleanOldEntries();
+      const match   = entries.find(e => e.key === key);
+      return match && (Date.now() - match.timestamp) < TWO_HOURS;
+    }
+
+    function saveSubmission(key) {
+      const entries = cleanOldEntries().filter(e => e.key !== key);
+      entries.push({ key, timestamp: Date.now() });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    }
+
+    // =============================================
+    // VALIDACIÓN
+    // =============================================
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function setError(input, msg) {
+      input.classList.add('error');
+      input.classList.remove('valid');
+      const span = input.parentElement.querySelector('.error-msg');
+      if (span) { span.textContent = msg; span.classList.add('show'); }
+    }
+
+    function setValid(input) {
+      input.classList.remove('error');
+      input.classList.add('valid');
+      const span = input.parentElement.querySelector('.error-msg');
+      if (span) span.classList.remove('show');
+    }
+
+    function validateField(el) {
+      const val = el.value.trim();
+      const tag = el.tagName.toLowerCase();
+
+      if (tag === 'select') {
+        if (!val) { setError(el, 'Dato obligatorio'); return false; }
+        setValid(el); return true;
+      }
+      if (el.type === 'email') {
+        if (!val)               { setError(el, 'Dato obligatorio'); return false; }
+        if (!emailRegex.test(val)) { setError(el, 'Ingresa un correo electrónico válido'); return false; }
+        setValid(el); return true;
+      }
+      if (el.type === 'tel') {
+        const digits = val.replace(/[^\d]/g, '');
+        if (!val || digits.length < 9 || !/^[\d+\s-]+$/.test(val)) {
+          setError(el, 'Ingresa un número válido (mínimo 9 dígitos)'); return false;
+        }
+        setValid(el); return true;
+      }
+      if (tag === 'textarea') {
+        if (val.length < 20) { setError(el, 'Por favor describe tu proyecto con más detalle'); return false; }
+        setValid(el); return true;
+      }
+      // text por defecto
+      if (val.length < 3) { setError(el, 'Dato obligatorio'); return false; }
+      setValid(el); return true;
+    }
+
+    // Validación en tiempo real (solo en campos que ya fallaron)
+    const form           = document.getElementById('contactForm');
+    const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+
+    requiredFields.forEach(el => {
+      ['input', 'change'].forEach(ev => {
+        el.addEventListener(ev, () => { if (el.classList.contains('error')) validateField(el); });
+      });
+    });
+
+    // =============================================
+    // ESTADO DE CARGA
+    // =============================================
+    const submitBtn     = document.getElementById('submitBtn');
+    const originalLabel = submitBtn.innerHTML;
+    const spinnerLabel  = `<svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Enviando...`;
+
+    function setLoading(on) {
+      submitBtn.disabled  = on;
+      submitBtn.innerHTML = on ? spinnerLabel : originalLabel;
+    }
+
+    // =============================================
+    // SUBMIT
+    // =============================================
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // 1. Validar todos los campos requeridos
+      let allValid = true;
+      requiredFields.forEach(el => { if (!validateField(el)) allValid = false; });
+      if (!allValid) return;
+
+      // 2. Chequeo de duplicado
+      const email     = form.email.value.trim();
+      const nombre    = form.nombre.value.trim();
+      const direccion = form.direccion.value.trim();
+      const dupKey    = makeKey(email, nombre, direccion);
+
+      if (isDuplicate(dupKey)) { openModal('modalDuplicate'); return; }
+
+      // 3. Activar estado de carga
+      setLoading(true);
+
+      // 4. Preparar datos del correo
+      const tieneFotos = form.fotos.files.length > 0 ? 'Sí' : 'No';
+      const params = {
+        nombre,
+        correo:      email,
+        telefono:    form.telefono.value.trim(),
+        comuna:      form.comuna.value,
+        region:      'Región Metropolitana',
+        direccion,
+        descripcion: form.descripcion.value.trim(),
+        fotos:       tieneFotos,
+      };
+
+      // 5. Enviar con EmailJS (o simular en modo demo)
+      try {
+        if (!DEMO_MODE) {
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+        } else {
+          // Modo demo: simula un delay de red de 1.5s
+          await new Promise(r => setTimeout(r, 1500));
+        }
+        saveSubmission(dupKey);
+        setLoading(false);
+        openModal('modalSuccess');
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        setLoading(false);
+        openModal('modalError');
+      }
+    });
+  </script>
+
 </body>
 </html>
